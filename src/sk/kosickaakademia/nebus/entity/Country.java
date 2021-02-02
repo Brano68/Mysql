@@ -1,5 +1,7 @@
 package sk.kosickaakademia.nebus.entity;
 
+import java.util.ArrayList;
+
 public class Country {
 
     private String name;
@@ -7,6 +9,7 @@ public class Country {
     private String capitalCity;
     private int area;
     private String continent;
+    private ArrayList<String> languages;
 
     public Country(String name, String code3, String capitalCity, int area, String continent) {
         this.name = name;
@@ -14,6 +17,18 @@ public class Country {
         this.capitalCity = capitalCity;
         this.area = area;
         this.continent = continent;
+    }
+
+    //second constructer with language
+
+
+    public Country(String name, String code3, String capitalCity, int area, String continent, ArrayList<String> languages) {
+        this.name = name;
+        this.code3 = code3;
+        this.capitalCity = capitalCity;
+        this.area = area;
+        this.continent = continent;
+        this.languages = languages;
     }
 
     public String getName() {
@@ -34,5 +49,9 @@ public class Country {
 
     public String getContinent() {
         return continent;
+    }
+
+    public ArrayList<String> getLanguages() {
+        return languages;
     }
 }

@@ -104,4 +104,126 @@ public class Databazaa {
         }
         return countryInfo;
     }
+
+    public Country getCountryInfoWithLanguage(String country){
+        String query = "SELECT country.name, country.code, city.name, " +
+                " JSON_UNQUOTE(JSON_EXTRACT(doc, '$.geography.Continent')) AS Continent, " +
+                " JSON_EXTRACT(doc, '$.geography.SurfaceArea') AS Area" +
+                " FROM country " +
+                " INNER JOIN city ON country.Capital = city.ID " +
+                " INNER JOIN countryinfo ON country.code = countryinfo._id " +
+                " WHERE country.name like ?";
+
+        Country countryInfo = null;
+        String code3 = "";
+        String capitalCity = "";
+        String continent = "";
+        int area = 0;
+        ArrayList<String> languages;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, country);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                code3 = rs.getString("country.code");
+                capitalCity = rs.getString("city.name");
+                continent = rs.getString("Continent");
+                area = rs.getInt("Area");
+                //String language = rs.getString("language");
+                //System.out.println(code3 + " " + capitalCity + " " + continent + " " + area + " " + language);
+                //languages = findOutLanguages(code3);
+            }
+            conn.close();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        languages = findOutLanguages(code3);
+        countryInfo = new Country(country, code3, capitalCity, area, continent, languages);
+        return countryInfo;
+    }
+
+    public ArrayList<String> findOutLanguages(String CountryCode){
+        ArrayList<String> languages = new ArrayList<>();
+
+        String query = "SELECT countrylanguage.language " +
+                " FROM countrylanguage " +
+                " WHERE CountryCode like ? AND IsOfficial like 'T'";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, CountryCode);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                String language = rs.getString("Language");
+                //System.out.println(language);
+                languages.add(language);
+            }
+            conn.close();
+            return languages;
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getCountryCode(String name){
+        if(name == null || name.equalsIgnoreCase("")){
+            return null;
+        }
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            String query = "Select code from country where name like ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String code = rs.getString("Code");
+                return code;
+            }
+
+            conn.close();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public void insertCity(City city){
+        String country = city.getCountry();
+        String code3 = getCountryCode(country);
+        if(code3==null){
+            System.out.println("Warning. The country doesnt exist!!!");
+        }else{
+            city.setCode3(code3);
+            String query = "INSERT INTO city (Name, CountryCode, District, Info) " +
+                    " VALUES( ?,?,?,?) ";
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(url, username, password);
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setString(1, city.getName());
+                ps.setString(2, city.getCode3());
+                ps.setString(3, city.getDistrict());
+                String json = "{\"Population\":"+city.getPopulation()+"}";
+                ps.setString(4,json);
+                int result = ps.executeUpdate();
+                System.out.println("Result" + result);
+
+                conn.close();
+
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+    }
 }
