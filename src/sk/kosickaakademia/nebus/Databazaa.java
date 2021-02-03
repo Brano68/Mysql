@@ -226,4 +226,58 @@ public class Databazaa {
             }
         }
     }
+
+
+    public void updatePopulation(String country, String city, int population){
+        //v pripade ze je populacia zaporna
+        if(population<=0){
+            System.out.println("Population can not be in the minus!!!");
+            return;
+        }
+        //kontrola ci je krajina v state
+        String query = "SELECT country.name AS Name1, city.name AS Name2 " +
+                " FROM country " +
+                " INNER JOIN city ON country.Code = city.CountryCode " +
+                " WHERE country.name like ?";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            if(conn != null){
+
+                System.out.println("Success");
+                PreparedStatement ps = conn.prepareStatement(query);
+                //osetrenie otaznikom
+                ps.setString(1, country);
+                //System.out.println(ps);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    String nameCountry = rs.getString("Name1");
+                    String nameCity = rs.getString("Name2");
+                    System.out.println(nameCountry + " " + nameCity);
+                    if(nameCountry.equalsIgnoreCase(country) && nameCity.equalsIgnoreCase(city)){
+                        query = "UPDATE city SET Info = ? " +
+                        " WHERE city.Name like ?";
+
+                        ps = conn.prepareStatement(query);
+                        String json = "{\"Population\":"+population+"}";
+                        ps.setString(1, json);
+                        ps.setString(2, city);
+
+                        int result = ps.executeUpdate();
+                        System.out.println("Result" + result);
+
+                        conn.close();
+                        return;
+                    }
+
+                }
+                conn.close();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        System.out.println("I am sorry but you wrote it wrong!!!");
+    }
+
+
 }

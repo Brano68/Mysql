@@ -6,6 +6,7 @@ public class City {
     private String district;
     private String code3;
     private String country;
+    private String city;
 
     public City(String name, int population){
         this.name = name;
@@ -18,6 +19,7 @@ public class City {
         this.district = district;
         this.country = country;
     }
+
 
     public String getName() {
         return name;

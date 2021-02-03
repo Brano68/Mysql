@@ -34,8 +34,11 @@ public class Main {
         //String code = databazaa.getCountryCode("Anglicko");
        //System.out.println(code);
 
-        City city = new City("Cerveny Klastor", 1500, "Stara Lubovna", "Slovakia");
-        databazaa.insertCity(city);
+        //City city = new City("Cerveny Klastor", 1500, "Stara Lubovna", "Slovakia");
+        //databazaa.insertCity(city);
+
+        databazaa.updatePopulation("Slovakia", "Bratislava", 8);
+
 
     }
 }
