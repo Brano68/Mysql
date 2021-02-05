@@ -1,5 +1,6 @@
 package sk.kosickaakademia.nebus;
 
+import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
 import sk.kosickaakademia.nebus.output.Output;
@@ -37,8 +38,9 @@ public class Main {
         //City city = new City("Cerveny Klastor", 1500, "Stara Lubovna", "Slovakia");
         //databazaa.insertCity(city);
 
-        databazaa.updatePopulation("Slovakia", "Bratislava", 8);
+        //databazaa.updatePopulation("Slovakia", "Bratislava", 8);
 
-
+        List<CapitalCity> list = databazaa.getCapitalCities("Asia");
+        out.printCapitalCities(list);
     }
 }

@@ -1,5 +1,6 @@
 package sk.kosickaakademia.nebus;
 
+import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
 
@@ -279,5 +280,57 @@ public class Databazaa {
         System.out.println("I am sorry but you wrote it wrong!!!");
     }
 
+
+    public List<CapitalCity> getCapitalCities(String continent) {
+        List<CapitalCity> list = new ArrayList<>();
+
+        String query = "SELECT JSON_EXTRACT(doc,'$.geography.Continent') AS Continent, " +
+                " JSON_EXTRACT(doc,'$.Name') AS Name, " +
+                " JSON_EXTRACT(doc,'$.demographics.Population') AS Population, " +
+                " city.Name AS Capital " +
+                " FROM countryinfo " +
+                " INNER JOIN city ON city.CountryCode = JSON_UNQUOTE(JSON_EXTRACT(doc,'$._id')) "+
+                " INNER JOIN country ON country.Capital = city.ID "+
+                " WHERE JSON_UNQUOTE(JSON_EXTRACT(doc,'$.geography.Continent')) like ?";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            if(conn != null){
+
+                System.out.println("Success");
+                PreparedStatement ps = conn.prepareStatement(query);
+                //osetrenie otaznikom
+                ps.setString(1, continent);
+
+                System.out.println(ps);
+                ResultSet rs = ps.executeQuery();
+                int i = 0;
+                while(rs.next()){
+                    String name = rs.getString("Name");
+                    String capital = rs.getString("Capital");
+                    int pop = rs.getInt("Population");
+                    CapitalCity capitalCity = new CapitalCity(name, capital, pop);
+                    i++;
+                    list.add(capitalCity);
+                }
+                System.out.println("I have found: " + i + " countries.");
+                conn.close();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+/*
+select z meetu
+SELECT country.name AS Krajina, city.name AS Mestecko,
+         JSON_EXTRACT(Info,'$.Population') AS Populacia
+            FROM country
+            INNER JOIN city ON country.Capital = city.ID
+            INNER JOIN countryinfo ON country.code = countryinfo._id
+           WHERE JSON_UNQUOTE(JSON_EXTRACT(doc, '$.geography.Continent')) like 'Asia';
+ */
 
 }

@@ -1,5 +1,6 @@
 package sk.kosickaakademia.nebus.output;
 
+import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
 
@@ -45,5 +46,9 @@ public class Output {
     }
 
 
-
+    public void printCapitalCities(List <CapitalCity> list){
+        for(CapitalCity i : list){
+            System.out.println(i.getNameCountry() + "->" + i.getNameCapitalCity() + "->" + i.getCountOfCityzenships());
+        }
+    }
 }
