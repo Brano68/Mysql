@@ -3,6 +3,7 @@ package sk.kosickaakademia.nebus;
 import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
+import sk.kosickaakademia.nebus.entity.Monument;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -335,7 +336,7 @@ SELECT country.name AS Krajina, city.name AS Mestecko,
 
 
     public boolean insertNewMonument(String code3, String city, String name){
-        //kontrola ci je krajina v state
+        //kontrola
         String query = "SELECT city.Name AS Name, city.CountryCode AS CountryCode, city.ID AS ID " +
                 " FROM city " +
                 " WHERE city.name like ? AND city.CountryCode like ?";
@@ -381,6 +382,39 @@ SELECT country.name AS Krajina, city.name AS Mestecko,
         }
         System.out.println("I am sorry but you wrote it wrong!!!");
         return false;
+    }
+
+    public List<Monument>  getMonuments(){
+        List<Monument> list = new ArrayList<>();
+        String query = "SELECT country.name AS CountryName, city.name AS CityName, monument.name AS MonumentName, monument.id AS MonumentID " +
+                " FROM monument " +
+                " INNER JOIN city ON city.ID = monument.city" +
+                " INNER JOIN country ON country.code = city.CountryCode ";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            if(conn != null){
+
+                System.out.println("Success");
+                PreparedStatement ps = conn.prepareStatement(query);
+
+                System.out.println(ps);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    String countryName = rs.getString("CountryName");
+                    String cityName = rs.getString("CityName");
+                    String monumentName = rs.getString("MonumentName");
+                    int idMonument = rs.getInt("MonumentID");
+                    Monument monument = new Monument(countryName, cityName, monumentName, idMonument);
+                    list.add(monument);
+                }
+                conn.close();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return list;
     }
 
 

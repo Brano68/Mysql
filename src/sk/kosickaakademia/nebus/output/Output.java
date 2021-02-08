@@ -3,6 +3,7 @@ package sk.kosickaakademia.nebus.output;
 import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
+import sk.kosickaakademia.nebus.entity.Monument;
 
 import java.util.List;
 
@@ -49,6 +50,13 @@ public class Output {
     public void printCapitalCities(List <CapitalCity> list){
         for(CapitalCity i : list){
             System.out.println(i.getNameCountry() + "->" + i.getNameCapitalCity() + "->" + i.getCountOfCityzenships());
+        }
+    }
+
+    public void printMonuments( List<Monument> list ){
+        for(Monument i : list){
+            System.out.println("CityName: " + i.getCityName() + " CountryName: " + i.getCountryName()
+                    + " Idmonumet: " + i.getIdMonument() + " MonumentName: " + i.getMonumentName());
         }
     }
 }

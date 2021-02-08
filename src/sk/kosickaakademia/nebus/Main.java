@@ -3,6 +3,7 @@ package sk.kosickaakademia.nebus;
 import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
+import sk.kosickaakademia.nebus.entity.Monument;
 import sk.kosickaakademia.nebus.output.Output;
 
 import java.util.List;
@@ -45,5 +46,8 @@ public class Main {
 
         databazaa.insertNewMonument("SVK", "Bratislava", "Bratislavsky Hrad");
 
+        List<Monument> list = databazaa.getMonuments();
+        System.out.println();
+        out.printMonuments(list);
     }
 }
