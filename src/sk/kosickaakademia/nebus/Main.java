@@ -40,7 +40,10 @@ public class Main {
 
         //databazaa.updatePopulation("Slovakia", "Bratislava", 8);
 
-        List<CapitalCity> list = databazaa.getCapitalCities("Asia");
-        out.printCapitalCities(list);
+        //List<CapitalCity> list = databazaa.getCapitalCities("Asia");
+        //out.printCapitalCities(list);
+
+        databazaa.insertNewMonument("SVK", "Bratislava", "Bratislavsky Hrad");
+
     }
 }

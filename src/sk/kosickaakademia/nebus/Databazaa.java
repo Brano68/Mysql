@@ -333,4 +333,57 @@ SELECT country.name AS Krajina, city.name AS Mestecko,
            WHERE JSON_UNQUOTE(JSON_EXTRACT(doc, '$.geography.Continent')) like 'Asia';
  */
 
+
+    public boolean insertNewMonument(String code3, String city, String name){
+        //kontrola ci je krajina v state
+        String query = "SELECT city.Name AS Name, city.CountryCode AS CountryCode, city.ID AS ID " +
+                " FROM city " +
+                " WHERE city.name like ? AND city.CountryCode like ?";
+
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            if(conn != null){
+
+                System.out.println("Success");
+                PreparedStatement ps = conn.prepareStatement(query);
+                //osetrenie otaznikom
+                ps.setString(1, city);
+                ps.setString(2, code3);
+                System.out.println(ps);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    String nameCity = rs.getString("Name");
+                    String code = rs.getString("CountryCode");
+                    int cityID = rs.getInt("ID");
+                    //System.out.println(nameCountry + " " + nameCity);
+
+                    if(nameCity.equalsIgnoreCase(city) && code.equalsIgnoreCase(code3)){
+                        query = "INSERT INTO monument (name, city) VALUES (?, ?)";
+
+                        ps = conn.prepareStatement(query);
+                        ps.setString(1, name);
+                        ps.setInt(2, cityID);
+
+                        int result = ps.executeUpdate();
+                        System.out.println("Result" + result);
+
+                        conn.close();
+                        return true;
+                    }
+
+                }
+                conn.close();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        System.out.println("I am sorry but you wrote it wrong!!!");
+        return false;
+    }
+
+
+
+
 }
