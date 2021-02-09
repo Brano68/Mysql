@@ -2,6 +2,8 @@ package sk.kosickaakademia.nebus.json;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import sk.kosickaakademia.nebus.Databazaa;
 import sk.kosickaakademia.nebus.entity.Monument;
 
@@ -70,6 +72,21 @@ public class JsonikServer {
         String country = (String) json.get("city");
         String name = (String) json.get("name");
         if(new Databazaa().insertNewMonument(code3, country, name)){
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean insertNewMonumet(String json) throws ParseException {
+
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(json);
+        System.out.println(jsonObject);
+        String code3 = (String) jsonObject.get("code3");
+        String city = (String) jsonObject.get("city");
+        String name = (String) jsonObject.get("name");
+        if(new Databazaa().insertNewMonument(code3, city, name)){
             return true;
         }
         return false;

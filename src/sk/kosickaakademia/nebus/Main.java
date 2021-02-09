@@ -2,6 +2,7 @@ package sk.kosickaakademia.nebus;
 
 import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
@@ -9,10 +10,11 @@ import sk.kosickaakademia.nebus.entity.Monument;
 import sk.kosickaakademia.nebus.json.JsonikServer;
 import sk.kosickaakademia.nebus.output.Output;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         Databazaa databazaa = new Databazaa();
         Output out = new Output();
         /*
@@ -53,6 +55,8 @@ public class Main {
         //System.out.println();
         //out.printMonuments(list);
 
+
+
         JsonikServer jsonikServer = new JsonikServer();
         System.out.println(jsonikServer.getMonuments());
 
@@ -60,6 +64,15 @@ public class Main {
         System.out.println(json);
 
         System.out.println(jsonikServer.insertNewMonument(makeJson()));
+
+
+
+
+        //2 way
+        String string = "{\"code3\":\"SVK\",\"city\":\"Bratislava\",\"name\":\"Bratislavsky rytier\"}";
+        JsonikServer jsonikServer2 = new JsonikServer();
+        System.out.println(jsonikServer2.insertNewMonumet(string));
+
 
     }
 
