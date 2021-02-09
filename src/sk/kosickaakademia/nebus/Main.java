@@ -4,6 +4,7 @@ import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
 import sk.kosickaakademia.nebus.entity.Monument;
+import sk.kosickaakademia.nebus.json.JsonikServer;
 import sk.kosickaakademia.nebus.output.Output;
 
 import java.util.List;
@@ -44,10 +45,14 @@ public class Main {
         //List<CapitalCity> list = databazaa.getCapitalCities("Asia");
         //out.printCapitalCities(list);
 
-        databazaa.insertNewMonument("SVK", "Bratislava", "Bratislavsky Hrad");
+        //databazaa.insertNewMonument("SVK", "Bratislava", "Bratislavsky Hrad");
 
-        List<Monument> list = databazaa.getMonuments();
-        System.out.println();
-        out.printMonuments(list);
+        //List<Monument> list = databazaa.getMonuments();
+        //System.out.println();
+        //out.printMonuments(list);
+
+        JsonikServer jsonikServer = new JsonikServer();
+        System.out.println(jsonikServer.getMonuments());
+        System.out.println(jsonikServer.getMonumentss());
     }
 }
