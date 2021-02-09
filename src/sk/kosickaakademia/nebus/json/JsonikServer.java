@@ -58,4 +58,20 @@ public class JsonikServer {
         return jsonObject;
 
     }
+
+
+    public boolean insertNewMonument(JSONObject json){
+        if(json.isEmpty()){
+            return false;
+        }
+        System.out.println(json);
+
+        String code3 = (String) json.get("code3");
+        String country = (String) json.get("city");
+        String name = (String) json.get("name");
+        if(new Databazaa().insertNewMonument(code3, country, name)){
+            return true;
+        }
+        return false;
+    }
 }

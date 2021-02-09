@@ -1,5 +1,7 @@
 package sk.kosickaakademia.nebus;
 
+import netscape.javascript.JSObject;
+import org.json.simple.JSONObject;
 import sk.kosickaakademia.nebus.entity.CapitalCity;
 import sk.kosickaakademia.nebus.entity.City;
 import sk.kosickaakademia.nebus.entity.Country;
@@ -53,6 +55,22 @@ public class Main {
 
         JsonikServer jsonikServer = new JsonikServer();
         System.out.println(jsonikServer.getMonuments());
-        System.out.println(jsonikServer.getMonumentss());
+
+        String json = makeJson().toJSONString();
+        System.out.println(json);
+
+        System.out.println(jsonikServer.insertNewMonument(makeJson()));
+
     }
+
+
+    public static JSONObject makeJson(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code3","SVK");
+        jsonObject.put("city", "Bratislava");
+        jsonObject.put("name", "Bratislavsky UFO most");
+        return jsonObject;
+    }
+
+
 }
